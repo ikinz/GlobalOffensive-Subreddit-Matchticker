@@ -14,6 +14,26 @@ $(document).ready(function() {
 	$('.tabmenu').append(newdiv);
 	$("#showticker").click(function(e) {
 		e.preventDefault();
-		alert("test");
+		displayTicker();
+		setLSShowTicker();
 	});
+	
+	var savedShowTicker = localStorage.getItem("showTicker");
+	if (savedShowTicker !== null) {
+		if (savedShowTicker == "true") {
+			displayTicker();	
+		}
+	}
 });
+
+function setLSShowTicker() {
+	
+}
+
+function displayTicker() {
+	var div = $("<div></div>");
+	div.width("100%");
+	div.text("No matches available");
+	
+	$('#header').append(div);
+}
