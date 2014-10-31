@@ -9,30 +9,36 @@
 // ==/UserScript==
 
 this.$ = this.jQuery = jQuery.noConflict(true);
+
 $(document).ready(function() {
-    var newdiv = $("<li></li>").append("<a id='showticker' href='#'>Show Matchticker</a>");
-	$('.tabmenu').append(newdiv);
-	$("#showticker").click(function(e) {
-		e.preventDefault();
-		displayTicker();
-		setLSShowTicker();
-	});
-	
-	var savedShowTicker = localStorage.getItem("showTicker");
-	if (savedShowTicker !== null) {
-		if (savedShowTicker == "true") {
-			displayTicker();	
-		}
-	}
+	createElements();
 });
 
 function setLSShowTicker() {
 	
 }
 
-function displayTicker() {
-	var div = $("<div></div>");
-	div.text("No matches available");
+function createElements() {
+	var tickerdiv = $("<div id='custommatchticker'></div>");
+	tickerdiv.is(":hidden");
+	$('.content').prepend(tickerdiv);
 	
-	$('.content').prepend(div);
+	var menudiv = $("<li></li>").append("<a id='showticker' href='#'>Show Matchticker</a>");
+	$('.tabmenu').append(menudiv);
+	$("#showticker").on("click", function(e) {
+		e.preventDefault();
+		displayMatchTicker();
+		setLSShowTicker();
+	});
+	
+	var savedShowTicker = localStorage.getItem("showTicker");
+	if (savedShowTicker !== null) {
+		if (savedShowTicker == "true") {
+			displayMatchTicker();	
+		}
+	}
+}
+
+function displayMatchTicker() {
+	$('.content:first-child').append($('<p>test</p>'));
 }
