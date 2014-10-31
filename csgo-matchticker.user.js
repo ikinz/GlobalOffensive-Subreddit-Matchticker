@@ -32,7 +32,6 @@ function setLSShowTicker() {
 
 function displayTicker() {
 	var div = $("<div></div>");
-	div.width("100%");
 	div.text("No matches available");
 	
 	$('.content').append(div);
