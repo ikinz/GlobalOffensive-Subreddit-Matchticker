@@ -12,4 +12,9 @@ this.$ = this.jQuery = jQuery.noConflict(true);
 $(document).ready(function() {
     var newdiv = $("<li></li>").append("<a id='showticker' href='#'>Show Matchticker</a>");
 	$('.tabmenu').append(newdiv);
+	$("#showticker").click(tickerMenuClick);
 });
+
+function tickerMenuClick() {
+	alert("test");
+}
