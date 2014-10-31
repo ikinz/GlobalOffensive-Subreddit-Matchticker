@@ -34,5 +34,5 @@ function displayTicker() {
 	var div = $("<div></div>");
 	div.text("No matches available");
 	
-	$('.content').append(div);
+	$('.content').prepend(div);
 }
