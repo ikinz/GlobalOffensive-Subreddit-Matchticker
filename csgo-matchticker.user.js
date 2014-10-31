@@ -60,19 +60,27 @@ function displayMatchTicker() {
 	} else {
 		div.slideDown("fast");
 		tickerShowing = true;
+		
+		var hltvrss = "http://www.hltv.org/hltv.rss.php";
+		GM_xmlhttpRequest({
+			method: "GET",
+			url: hltvrss,
+			data: "pri=15",
+			headers: {
+				"User-Agent": "Mozilla/5.0",  
+				"Accept": "text/xml"           
+			},
+			onload: function(data) {
+				var res = data.responseText;
+				res = $($.parseXML(res));
+				res.find("item").each(function(i, e) {
+					var div = $('#siteTable > div').first();
+					var el = $(e);
+					
+					var title = $(el.find("title")[0]).html();
+					var hltvlink = $(el.find("link")[0]).html();
+				});
+			}
+		});
 	}
-	
-	var hltvrss = "http://www.hltv.org/hltv.rss.php";
-	GM_xmlhttpRequest({
-		method: "GET",
-		url: hltvrss,
-		data: "pri=15",
-		headers: {
-			"User-Agent": "Mozilla/5.0",    // If not specified, navigator.userAgent will be used.
-			"Accept": "text/xml"            // If not specified, browser defaults will be used.
-		},
-		onload: function(data) {
-			alert(data.responseText);
-		}
-	});
 }
