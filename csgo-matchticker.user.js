@@ -4,7 +4,7 @@
 // @description This will make the matchticker more obvious when using the global offensive subreddit. You will also be able to toggle live scores.
 // @include     *.reddit.com/r/GlobalOffensive/*
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @version     0.0.2
+// @version     0.1.0
 // @grant 		GM_xmlhttpRequest
 // @grant		GM_addStyle
 // ==/UserScript==
@@ -27,6 +27,12 @@ $(document).ready(function() {
 			"width: calc(25% - 22px);" +
 			"float: left;" +
 			"position: relative;" +
+		"}"
+	);
+	GM_addStyle(
+		".ticker-options {" +
+			"height: 100%;" +
+			"width: 40px;" +
 		"}"
 	);
 	
@@ -55,6 +61,8 @@ function createElements() {
 }
 
 function displayMatchTicker() {
+	addOptionsButton();
+	
 	var hltvrss = "http://www.hltv.org/hltv.rss.php";
 	GM_xmlhttpRequest({
 		method: "GET",
@@ -84,8 +92,15 @@ function displayMatchTicker() {
 	});
 }
 
-function addMatch(title, hltvlink, time) {
-	var tickerdiv = $("<div id='custommatchticker'></div>");
+function addOptionsButton() {
+	var tickeroptions = $("<div></div>");
+	tickeroptions.addClass("link");
+	tickeroptions.addClass("ticker-options");
+	
+}
+
+function addMatch(title, hltvlink, time) {	
+	var tickerdiv = $("<div></div>");
 	tickerdiv.addClass("link");
 	tickerdiv.addClass("ticker-div");
 	tickerdiv.css('height', '');
