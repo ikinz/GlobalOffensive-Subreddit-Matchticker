@@ -2,7 +2,7 @@
 // @name        GlobalOffensiveLiveMatchTicker
 // @namespace   globaloffensive-reddit-matchticker
 // @description This will make the matchticker more obvious when using the global offensive subreddit. You will also be able to toggle live scores.
-// @include     *.reddit.com/r/GlobalOffensive/*
+// @include     *.reddit.com/r/GlobalOffensive*
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
 // @version     0.1.0
 // @grant 		GM_xmlhttpRequest
@@ -39,25 +39,34 @@ $(document).ready(function() {
 	createElements();
 });
 
-function setLSShowTicker() {
-	
-}
-
 function createElements() {
 	var menudiv = $("<li></li>").append("<a id='showticker' href='#'>Show Matchticker</a>");
 	$(menudiv).appendTo('.tabmenu');
 	$("#showticker").on("click", function(e) {
 		e.preventDefault();
-		displayMatchTicker();
-		setLSShowTicker();
+				
+		if ($("#showticker").text() === "Hide Matchticker") {
+			localStorage.setItem("showTicker", "false");
+			$("#showticker").text("Show Matchticker");
+			hideMatchTicker();
+		} else {
+			localStorage.setItem("showTicker", "true");
+			$("#showticker").text("Hide Matchticker");
+			displayMatchTicker();
+		}
 	});
 	
 	var savedShowTicker = localStorage.getItem("showTicker");
 	if (savedShowTicker !== null) {
 		if (savedShowTicker == "true") {
-			displayMatchTicker();	
+			displayMatchTicker();
+			$("#showticker").text("Hide Matchticker");	
 		}
 	}
+}
+
+function hideMatchTicker() {
+	$(".ticker-div").remove();
 }
 
 function displayMatchTicker() {
