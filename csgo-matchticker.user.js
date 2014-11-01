@@ -12,6 +12,7 @@
 this.$ = this.jQuery = jQuery.noConflict(true);
 
 $(document).ready(function() {
+	// Add css styles
 	GM_addStyle(
 		".ticker-match {" +
 			"width: 19%;" +
@@ -36,6 +37,7 @@ $(document).ready(function() {
 		"}"
 	);
 	
+	// Start the script
 	createElements();
 });
 
@@ -45,6 +47,7 @@ function createElements() {
 	$("#showticker").on("click", function(e) {
 		e.preventDefault();
 				
+		// Show or hide ticker
 		if ($("#showticker").text() === "Hide Matchticker") {
 			localStorage.setItem("showTicker", "false");
 			$("#showticker").text("Show Matchticker");
@@ -56,6 +59,8 @@ function createElements() {
 		}
 	});
 	
+	// Check whether the user had the matchticker open the last time visiting the page
+	// Show ticker if so.
 	var savedShowTicker = localStorage.getItem("showTicker");
 	if (savedShowTicker !== null) {
 		if (savedShowTicker == "true") {
@@ -72,6 +77,7 @@ function hideMatchTicker() {
 function displayMatchTicker() {
 	addOptionsButton();
 	
+	// get hot matches from hltv rss
 	var hltvrss = "http://www.hltv.org/hltv.rss.php";
 	GM_xmlhttpRequest({
 		method: "GET",
@@ -116,9 +122,13 @@ function addMatch(title, hltvlink, time) {
 	tickerdiv.slideUp("fast");
 	$(tickerdiv).prependTo('#siteTable');
 	
+	var div_left = $("<div></div>");
+	div_left.attr("style", "width: 80%; float:left;");
+	div_left.appendTo(tickerdiv);
+	
 	var a_title = $("<a></a>");
 	a_title.addClass("title");
 	a_title.text(title);
 	a_title.attr("href", hltvlink);
-	a_title.appendTo(tickerdiv);
+	a_title.appendTo(div_left);
 }
