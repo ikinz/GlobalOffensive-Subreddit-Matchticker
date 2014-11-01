@@ -11,12 +11,22 @@
 
 this.$ = this.jQuery = jQuery.noConflict(true);
 
-var tickerShowing = false;
-
 $(document).ready(function() {
 	GM_addStyle(
 		".ticker-match {" +
-			"width: 10%;" +
+			"width: 19%;" +
+			"height: 80px;" +
+			"background-color: #000;" +
+			"float: left;" +
+			"margin-left: 1px;" +
+		"}"
+	);
+	GM_addStyle(
+		".ticker-div {" +
+			"width: -webkit-calc(25% - 22px);" +
+			"width: calc(25% - 22px);" +
+			"float: left;" +
+			"position: relative;" +
 		"}"
 	);
 	
@@ -28,12 +38,6 @@ function setLSShowTicker() {
 }
 
 function createElements() {
-	var tickerdiv = $("<div id='custommatchticker'></div>");
-	tickerdiv.addClass("link");
-	//tickerdiv.is(":hidden");
-	tickerdiv.slideUp("fast");
-	$(tickerdiv).prependTo('#siteTable');
-	
 	var menudiv = $("<li></li>").append("<a id='showticker' href='#'>Show Matchticker</a>");
 	$(menudiv).appendTo('.tabmenu');
 	$("#showticker").on("click", function(e) {
@@ -51,36 +55,46 @@ function createElements() {
 }
 
 function displayMatchTicker() {
-	var div = $('#siteTable > div').first();
-	div.text("test");
-	
-	if (tickerShowing) {
-		div.slideUp("fast");
-		tickerShowing = false;
-	} else {
-		div.slideDown("fast");
-		tickerShowing = true;
-		
-		var hltvrss = "http://www.hltv.org/hltv.rss.php";
-		GM_xmlhttpRequest({
-			method: "GET",
-			url: hltvrss,
-			data: "pri=15",
-			headers: {
-				"User-Agent": "Mozilla/5.0",  
-				"Accept": "text/xml"           
-			},
-			onload: function(data) {
-				var res = data.responseText;
-				res = $($.parseXML(res));
-				res.find("item").each(function(i, e) {
-					var div = $('#siteTable > div').first();
-					var el = $(e);
-					
-					var title = $(el.find("title")[0]).html();
-					var hltvlink = $(el.find("link")[0]).html();
-				});
+	var hltvrss = "http://www.hltv.org/hltv.rss.php";
+	GM_xmlhttpRequest({
+		method: "GET",
+		url: hltvrss,
+		data: "pri=15",
+		headers: {
+			"User-Agent": "Mozilla/5.0",  
+			"Accept": "text/xml"           
+		},
+		onload: function(data) {
+			var res = data.responseText;
+			res = $($.parseXML(res));
+			
+			$("<div class='clearleft'></div>").prependTo("#siteTable");
+			
+			var elements = res.find("item");
+			for (var i = elements.length-1; i >= 0; i--) {
+				var el = $(elements[i]);
+				
+				var title = $(el.find("title")[0]).html();
+				var hltvlink = $(el.find("link")[0]).html();
+				var time = $(el.find("pubDate")[0]).html();
+				
+				addMatch(title, hltvlink, time);
 			}
-		});
-	}
+		}
+	});
+}
+
+function addMatch(title, hltvlink, time) {
+	var tickerdiv = $("<div id='custommatchticker'></div>");
+	tickerdiv.addClass("link");
+	tickerdiv.addClass("ticker-div");
+	tickerdiv.css('height', '');
+	tickerdiv.slideUp("fast");
+	$(tickerdiv).prependTo('#siteTable');
+	
+	var a_title = $("<a></a>");
+	a_title.addClass("title");
+	a_title.text(title);
+	a_title.attr("href", hltvlink);
+	a_title.appendTo(tickerdiv);
 }
