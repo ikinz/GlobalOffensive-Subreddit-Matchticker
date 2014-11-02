@@ -166,7 +166,8 @@ function addMatch(title, hltvlink, time, tournament) {
 	lbl_tournament.text(tournament);
 	lbl_tournament.appendTo(div_left);
 	
-	var div_streams = $("<div></div>");
+	var div_streams = $("<div streamtag='" + hltvlink + "'></div>");
+	
 	div_streams.appendTo(div_left);
 	
 	var div_score = $("<div></div>");
@@ -188,4 +189,21 @@ function addMatch(title, hltvlink, time, tournament) {
 	lbl_score2.attr("style", "color: #FF0000;");
 	lbl_score2.text("X");
 	lbl_score2.appendTo(div_score);
+	
+	// Load matchpage
+	GM_xmlhttpRequest({
+		method: "POST",
+		url: hltvlink,
+		headers: {
+			"Content-Type": "application/x-www-form-urlencoded"          
+		},
+		onload: function(data) {
+			var res = data.responseText;
+			var html = $($.parseHTML(res));
+			alert(html.find(".headertext").text());
+			/*html.find(".headertext").each(function(index, element) {
+                alert(element.text());
+            });*/
+		}
+	});
 }
