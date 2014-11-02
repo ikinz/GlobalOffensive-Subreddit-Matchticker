@@ -4,7 +4,7 @@
 // @description This will make the matchticker more obvious when using the global offensive subreddit. You will also be able to toggle live scores.
 // @include     *.reddit.com/r/GlobalOffensive*
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @version     0.2.0
+// @version     0.3.0
 // @grant 		GM_xmlhttpRequest
 // @grant		GM_addStyle
 // ==/UserScript==
@@ -167,7 +167,8 @@ function addMatch(title, hltvlink, time, tournament) {
 	lbl_tournament.appendTo(div_left);
 	
 	var div_streams = $("<div streamtag='" + hltvlink + "'></div>");
-	
+	div_streams.attr("style", "color: #888;");
+	div_streams.text("Streams:");
 	div_streams.appendTo(div_left);
 	
 	var div_score = $("<div></div>");
@@ -176,18 +177,13 @@ function addMatch(title, hltvlink, time, tournament) {
 	var lbl_score1 = $("<p></p>");
 	lbl_score1.addClass("title");
 	lbl_score1.attr("style", "color: #0000FF;");
-	lbl_score1.text("X");
+	lbl_score1.text("0");
 	lbl_score1.appendTo(div_score);
-	
-	/*var lbl_scorediv = $("<p></p>");
-	lbl_scorediv.addClass("title");
-	lbl_scorediv.text("-");
-	lbl_scorediv.appendTo(div_score);*/
 	
 	var lbl_score2 = $("<p></p>");
 	lbl_score2.addClass("title");
 	lbl_score2.attr("style", "color: #FF0000;");
-	lbl_score2.text("X");
+	lbl_score2.text("0");
 	lbl_score2.appendTo(div_score);
 	
 	// Load matchpage
@@ -200,10 +196,20 @@ function addMatch(title, hltvlink, time, tournament) {
 		onload: function(data) {
 			var res = data.responseText;
 			var html = $($.parseHTML(res));
-			alert(html.find(".headertext").text());
-			/*html.find(".headertext").each(function(index, element) {
-                alert(element.text());
-            });*/
+			
+			var streams = html.find(".stream > img");
+			for (var i = 0; i < streams.length; i++) {
+				
+				// Load streams
+				var imgurl = $(streams[i]).attr("src");
+				var streamurl = $(streams[i]).parent().attr("id");
+				streamurl = "http://hltv.org/?pageid=286&streamid=" + streamurl;
+				
+				var streamlink = $("<a></a>");
+				streamlink.attr("href", streamurl);
+				$("<img style='margin-right: 2px;' src='" + imgurl + "'>").appendTo(streamlink);
+				streamlink.appendTo("div[streamtag='" + hltvlink + "']");
+			}
 		}
 	});
 }
