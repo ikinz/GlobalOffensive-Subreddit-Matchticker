@@ -88,10 +88,10 @@ function displayMatchTicker() {
 			for (var i = elements.length-1; i >= 0; i--) {
 				var el = $(elements[i]);
 				
-				var title = $(el.find("title")[0]).html();
-				var hltvlink = $(el.find("link")[0]).html();
-				var time = $(el.find("pubDate")[0]).html();
-				var tournament = $(el.find("description")[0]).html();
+				var title = $(el.find("title")[0]).text();
+				var hltvlink = $(el.find("link")[0]).text();
+				var time = $(el.find("pubDate")[0]).text();
+				var tournament = $(el.find("description")[0]).text();
 				
 				addMatch(title, hltvlink, time, tournament);
 			}
