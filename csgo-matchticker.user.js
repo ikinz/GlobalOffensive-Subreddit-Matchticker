@@ -4,7 +4,7 @@
 // @description This will make the matchticker more obvious when using the global offensive subreddit. You will also be able to toggle live scores.
 // @include     *.reddit.com/r/GlobalOffensive*
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @version     0.1.5
+// @version     0.2.0
 // @grant 		GM_xmlhttpRequest
 // @grant		GM_addStyle
 // ==/UserScript==
