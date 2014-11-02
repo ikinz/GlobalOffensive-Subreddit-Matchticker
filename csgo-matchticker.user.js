@@ -14,15 +14,6 @@ this.$ = this.jQuery = jQuery.noConflict(true);
 $(document).ready(function() {
 	// Add css styles
 	GM_addStyle(
-		".ticker-match {" +
-			"width: 19%;" +
-			"height: 80px;" +
-			"background-color: #000;" +
-			"float: left;" +
-			"margin-left: 1px;" +
-		"}"
-	);
-	GM_addStyle(
 		".ticker-div {" +
 			"width: -webkit-calc(25% - 22px);" +
 			"width: calc(25% - 22px);" +
@@ -100,8 +91,9 @@ function displayMatchTicker() {
 				var title = $(el.find("title")[0]).html();
 				var hltvlink = $(el.find("link")[0]).html();
 				var time = $(el.find("pubDate")[0]).html();
+				var tournament = $(el.find("description")[0]).html();
 				
-				addMatch(title, hltvlink, time);
+				addMatch(title, hltvlink, time, tournament);
 			}
 		}
 	});
@@ -114,8 +106,8 @@ function addOptionsButton() {
 	
 }
 
-function addMatch(title, hltvlink, time) {	
-	var tickerdiv = $("<div></div>");
+function addMatch(title, hltvlink, time, tournament) {	
+	var tickerdiv = $("<div id='" + title + time + "'></div>");
 	tickerdiv.addClass("link");
 	tickerdiv.addClass("ticker-div");
 	tickerdiv.css('height', '');
@@ -123,12 +115,49 @@ function addMatch(title, hltvlink, time) {
 	$(tickerdiv).prependTo('#siteTable');
 	
 	var div_left = $("<div></div>");
-	div_left.attr("style", "width: 80%; float:left;");
+	div_left.attr("style", "width: 90%; float:left;");
 	div_left.appendTo(tickerdiv);
+	
+	var div_right = $("<div></div>");
+	div_right.attr("style", "width: 10%; float:left;");
+	div_right.appendTo(tickerdiv);
 	
 	var a_title = $("<a></a>");
 	a_title.addClass("title");
 	a_title.text(title);
 	a_title.attr("href", hltvlink);
 	a_title.appendTo(div_left);
+	
+	var lbl_time = $("<p></p>");
+	lbl_time.attr("style", "color: #888;");
+	lbl_time.text("3h");
+	lbl_time.appendTo(div_left);
+	
+	var lbl_tournament = $("<p></p>");
+	lbl_tournament.attr("style", "color: #888;");
+	lbl_tournament.text(tournament);
+	lbl_tournament.appendTo(div_left);
+	
+	var div_streams = $("<div></div>");
+	div_streams.appendTo(div_left);
+	
+	var div_score = $("<div></div>");
+	div_score.appendTo(div_right);
+	
+	var lbl_score1 = $("<p></p>");
+	lbl_score1.addClass("title");
+	lbl_score1.attr("style", "color: #0000FF;");
+	lbl_score1.text("X");
+	lbl_score1.appendTo(div_score);
+	
+	/*var lbl_scorediv = $("<p></p>");
+	lbl_scorediv.addClass("title");
+	lbl_scorediv.text("-");
+	lbl_scorediv.appendTo(div_score);*/
+	
+	var lbl_score2 = $("<p></p>");
+	lbl_score2.addClass("title");
+	lbl_score2.attr("style", "color: #FF0000;");
+	lbl_score2.text("X");
+	lbl_score2.appendTo(div_score);
 }
