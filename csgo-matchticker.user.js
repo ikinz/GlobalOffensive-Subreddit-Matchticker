@@ -106,7 +106,31 @@ function addOptionsButton() {
 	
 }
 
-function addMatch(title, hltvlink, time, tournament) {	
+function getTimeLeft(date1, date2) {
+	var minute = 1000 * 60;
+	var hour = minute * 60;
+	
+	var ms1 = date1.getTime();
+	var ms2 = date2.getTime();
+	
+	if (ms1 <= ms2) {
+		return "LIVE";
+	} else {
+		var diff = ms1 - ms2;
+		
+		var hours = Math.floor(diff / hour);
+		diff = diff - (hours * hour);
+		var minutes = Math.round(diff / minute);
+		
+		return hours + "h" + minutes + "m";	
+	}
+}
+
+function addMatch(title, hltvlink, time, tournament) {
+	var today = new Date();
+	var date = new Date(time);
+	var timetomatch = getTimeLeft(date, today);
+		
 	var tickerdiv = $("<div id='" + title + time + "'></div>");
 	tickerdiv.addClass("link");
 	tickerdiv.addClass("ticker-div");
@@ -129,8 +153,12 @@ function addMatch(title, hltvlink, time, tournament) {
 	a_title.appendTo(div_left);
 	
 	var lbl_time = $("<p></p>");
-	lbl_time.attr("style", "color: #888;");
-	lbl_time.text("3h");
+	if (timetomatch === "LIVE") {
+		lbl_time.attr("style", "color: #00FF00;");
+	} else {
+		lbl_time.attr("style", "color: #888;");
+	}
+	lbl_time.text(timetomatch);
 	lbl_time.appendTo(div_left);
 	
 	var lbl_tournament = $("<p></p>");
