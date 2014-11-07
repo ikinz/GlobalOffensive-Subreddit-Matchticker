@@ -19,6 +19,8 @@ $(document).ready(function() {
 			"width: calc(25% - 22px);" +
 			"float: left;" +
 			"position: relative;" +
+            "overflow: hidden;" +
+			"white-space: nowrap;" +
 		"}"
 	);
 	GM_addStyle(
@@ -172,6 +174,7 @@ function addMatch(title, hltvlink, time, tournament) {
 	div_streams.appendTo(div_left);
 	
 	var div_score = $("<div></div>");
+    div_score.attr("style", "background-color: #FFFFFF;");
 	div_score.appendTo(div_right);
 	
 	var lbl_score1 = $("<p></p>");
@@ -197,10 +200,9 @@ function addMatch(title, hltvlink, time, tournament) {
 			var res = data.responseText;
 			var html = $($.parseHTML(res));
 			
+            // Load streams
 			var streams = html.find(".stream > img");
 			for (var i = 0; i < streams.length; i++) {
-				
-				// Load streams
 				var imgurl = $(streams[i]).attr("src");
 				var streamurl = $(streams[i]).parent().attr("id");
 				streamurl = "http://hltv.org/?pageid=286&streamid=" + streamurl;
@@ -210,6 +212,12 @@ function addMatch(title, hltvlink, time, tournament) {
 				$("<img style='margin-right: 2px;' src='" + imgurl + "'>").appendTo(streamlink);
 				streamlink.appendTo("div[streamtag='" + hltvlink + "']");
 			}
+            
+            // Load scores
+            var matchidIndex = res.indexOf("var matchid");
+            if (matchidIndex > 0) {
+
+            }
 		}
 	});
 }
