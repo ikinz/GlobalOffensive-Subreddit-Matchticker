@@ -4,12 +4,15 @@
 // @description This will make the matchticker more obvious when using the global offensive subreddit. You will also be able to toggle live scores.
 // @include     *.reddit.com/r/GlobalOffensive*
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
+// @require     https://cdn.socket.io/socket.io-1.2.0.js
 // @version     0.3.0
 // @grant 		GM_xmlhttpRequest
 // @grant		GM_addStyle
 // ==/UserScript==
 
 this.$ = this.jQuery = jQuery.noConflict(true);
+
+var socket;
 
 $(document).ready(function() {
 	// Add css styles
@@ -177,6 +180,8 @@ function addMatch(title, hltvlink, time, tournament) {
     div_score.attr("style", "background-color: #FFFFFF;");
 	div_score.appendTo(div_right);
 	
+    
+    
 	var lbl_score1 = $("<p></p>");
 	lbl_score1.addClass("title");
 	lbl_score1.attr("style", "color: #0000FF;");
@@ -213,10 +218,22 @@ function addMatch(title, hltvlink, time, tournament) {
 				streamlink.appendTo("div[streamtag='" + hltvlink + "']");
 			}
             
+            // Correct tournament (thank you for fucking this up shitty hltv rss!!!)
+            var tm = html.find("a[href^='/?pageid=82&eventid=']");
+            lbl_tournament.text($(tm[4]).text()); // index 0-3 = links in menu bar.
+            
+            
             // Load scores
             var matchidIndex = res.indexOf("var matchid");
             if (matchidIndex > 0) {
-
+                var matchid = res.substring(matchidIndex + 14, res.indexOf(";", matchidIndex));
+                
+                /*socket = io.connect('http://scorebot.hltv.org:10022');
+                socket.on('score', function(score) {
+                    lbl_score1.text(score['ctScore']);
+                    lbl_score2.text(score['tScore']);
+                });
+                socket.emit('readyForMatch', matchid);*/
             }
 		}
 	});
