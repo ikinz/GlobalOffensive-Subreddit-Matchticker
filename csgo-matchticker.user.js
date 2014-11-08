@@ -179,8 +179,6 @@ function addMatch(title, hltvlink, time, tournament) {
 	var div_score = $("<div></div>");
     div_score.attr("style", "background-color: #FFFFFF;");
 	div_score.appendTo(div_right);
-	
-    
     
 	var lbl_score1 = $("<p></p>");
 	lbl_score1.addClass("title");
@@ -221,7 +219,6 @@ function addMatch(title, hltvlink, time, tournament) {
             // Correct tournament (thank you for fucking this up shitty hltv rss!!!)
             var tm = html.find("a[href^='/?pageid=82&eventid=']");
             lbl_tournament.text($(tm[4]).text()); // index 0-3 = links in menu bar.
-            
             
             // Load scores
             var matchidIndex = res.indexOf("var matchid");
