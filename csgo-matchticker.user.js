@@ -172,7 +172,7 @@ function addMatch(title, hltvlink, time, tournament) {
 	lbl_tournament.appendTo(div_left);
 	
 	var div_streams = $("<div streamtag='" + hltvlink + "'></div>");
-	div_streams.attr("style", "color: #888;");
+	div_streams.attr("style", "color: #888; min-height: 15px;");
 	div_streams.text("Streams:");
 	div_streams.appendTo(div_left);
 	
