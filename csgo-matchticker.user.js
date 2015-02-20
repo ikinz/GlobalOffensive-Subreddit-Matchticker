@@ -12,6 +12,8 @@
 
 this.$ = this.jQuery = jQuery.noConflict(true);
 
+var socket;
+
 $(document).ready(function() {
 	// Add css styles
 	GM_addStyle(
@@ -20,6 +22,8 @@ $(document).ready(function() {
 			"width: calc(25% - 22px);" +
 			"float: left;" +
 			"position: relative;" +
+            "overflow: hidden;" +
+			"white-space: nowrap;" +
 		"}"
 	);
 	GM_addStyle(
@@ -176,13 +180,14 @@ function addMatch(title, hltvlink, time, tournament) {
 	lbl_tournament.appendTo(div_left);
 	
 	var div_streams = $("<div streamtag='" + hltvlink + "'></div>");
-	div_streams.attr("style", "color: #888;");
+	div_streams.attr("style", "color: #888; min-height: 15px;");
 	div_streams.text("Streams:");
 	div_streams.appendTo(div_left);
 	
 	var div_score = $("<div></div>");
+    div_score.attr("style", "background-color: #FFFFFF;");
 	div_score.appendTo(div_right);
-	
+    
 	var lbl_score1 = $("<p></p>");
 	lbl_score1.addClass("title");
 	lbl_score1.attr("style", "color: #0000FF;");
@@ -206,10 +211,9 @@ function addMatch(title, hltvlink, time, tournament) {
 			var res = data.responseText;
 			var html = $($.parseHTML(res));
 			
+            // Load streams
 			var streams = html.find(".stream > img");
 			for (var i = 0; i < streams.length; i++) {
-				
-				// Load streams
 				var imgurl = $(streams[i]).attr("src");
 				var streamurl = $(streams[i]).parent().attr("id");
 				streamurl = "http://hltv.org/?pageid=286&streamid=" + streamurl;
@@ -219,27 +223,23 @@ function addMatch(title, hltvlink, time, tournament) {
 				$("<img style='margin-right: 2px;' src='" + imgurl + "'>").appendTo(streamlink);
 				streamlink.appendTo("div[streamtag='" + hltvlink + "']");
 			}
-			
-			// Load background
-			//var loadImages = html.find("img [src*='bigflags'");
-			
-			//alert(JSON.stringify(loadImages));
-			//var img1 = $(loadImages[0]).attr("src");
-			//var img2 = $(loadImages[1]).attr("src");
-			
-			//alert(img1 + " " + img2);
-			
-			//var maindiv = $("#" + titlenospace + date.getTime());
-			//maindiv.attr("style", "back");
-			
-			// Load scores
-			var scores = $(html.find(".hotmatchbox > script"));
-			alert(JSON.stringify(scores));
-			for (var i = 0; i < scores.length; i++) {
-				alert("test");
-				var content = $(scores[i]).text();
-				alert(content);	
-			}
+            
+            // Correct tournament (thank you for fucking this up shitty hltv rss!!!)
+            var tm = html.find("a[href^='/?pageid=82&eventid=']");
+            lbl_tournament.text($(tm[4]).text()); // index 0-3 = links in menu bar.
+            
+            // Load scores
+            var matchidIndex = res.indexOf("var matchid");
+            if (matchidIndex > 0) {
+                var matchid = res.substring(matchidIndex + 14, res.indexOf(";", matchidIndex));
+                
+                /*socket = io.connect('http://scorebot.hltv.org:10022');
+                socket.on('score', function(score) {
+                    lbl_score1.text(score['ctScore']);
+                    lbl_score2.text(score['tScore']);
+                });
+                socket.emit('readyForMatch', matchid);*/
+            }
 		}
 	});
 }
