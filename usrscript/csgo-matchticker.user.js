@@ -5,7 +5,7 @@
 // @include     *.reddit.com/r/GlobalOffensive*
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
 // @require		https://cdn.socket.io/socket.io-1.2.0.js
-// @version     0.3.0
+// @version     0.9.0
 // @grant 		GM_xmlhttpRequest
 // @grant		GM_addStyle
 // ==/UserScript==
@@ -233,12 +233,19 @@ function addMatch(title, hltvlink, time, tournament) {
             if (matchidIndex > 0) {
                 var matchid = res.substring(matchidIndex + 14, res.indexOf(";", matchidIndex));
                 
-                /*socket = io.connect('http://scorebot.hltv.org:10022');
-                socket.on('score', function(score) {
-                    lbl_score1.text(score['ctScore']);
-                    lbl_score2.text(score['tScore']);
-                });
-                socket.emit('readyForMatch', matchid);*/
+                setInterval(function() {
+                    GM_xmlhttpRequest({
+                        method: "GET",
+                        url: "http://ikinz.se:8000/?matchid=" + matchid,
+                        headers: {
+                            "Content-Type": "application/json"          
+                        },
+                        onload: function(data) {
+                            lbl_score1.text(JSON.parse(data.responseText).scorea);
+                            lbl_score2.text(JSON.parse(data.responseText).scoreb);
+                        }
+                    });
+                }, 10000);
             }
 		}
 	});
