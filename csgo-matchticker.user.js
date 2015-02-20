@@ -4,6 +4,7 @@
 // @description This will make the matchticker more obvious when using the global offensive subreddit. You will also be able to toggle live scores.
 // @include     *.reddit.com/r/GlobalOffensive*
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
+// @require		https://cdn.socket.io/socket.io-1.2.0.js
 // @version     0.3.0
 // @grant 		GM_xmlhttpRequest
 // @grant		GM_addStyle
@@ -130,8 +131,16 @@ function addMatch(title, hltvlink, time, tournament) {
 	var today = new Date();
 	var date = new Date(time);
 	var timetomatch = getTimeLeft(date, today);
+	
+	// Decode title from HTML entities
+	var div_decoder = document.createElement('div');
+	div_decoder.innerHTML = title;
+	title = div_decoder.firstChild.nodeValue;
+	
+	var titlenospace = title.replace(/\s+/g, '');
+	titlenospace = titlenospace.replace(/[_\W]+/g, "")
 		
-	var tickerdiv = $("<div id='" + title + time + "'></div>");
+	var tickerdiv = $("<div id='" + titlenospace + date.getTime() + "'></div>");
 	tickerdiv.addClass("link");
 	tickerdiv.addClass("ticker-div");
 	tickerdiv.css('height', '');
@@ -209,6 +218,27 @@ function addMatch(title, hltvlink, time, tournament) {
 				streamlink.attr("href", streamurl);
 				$("<img style='margin-right: 2px;' src='" + imgurl + "'>").appendTo(streamlink);
 				streamlink.appendTo("div[streamtag='" + hltvlink + "']");
+			}
+			
+			// Load background
+			//var loadImages = html.find("img [src*='bigflags'");
+			
+			//alert(JSON.stringify(loadImages));
+			//var img1 = $(loadImages[0]).attr("src");
+			//var img2 = $(loadImages[1]).attr("src");
+			
+			//alert(img1 + " " + img2);
+			
+			//var maindiv = $("#" + titlenospace + date.getTime());
+			//maindiv.attr("style", "back");
+			
+			// Load scores
+			var scores = $(html.find(".hotmatchbox > script"));
+			alert(JSON.stringify(scores));
+			for (var i = 0; i < scores.length; i++) {
+				alert("test");
+				var content = $(scores[i]).text();
+				alert(content);	
 			}
 		}
 	});
