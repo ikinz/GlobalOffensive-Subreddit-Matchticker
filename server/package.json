@@ -1,0 +1,18 @@
+{
+  "name": "ticker-server",
+  "version": "0.0.0",
+  "description": "Serverside score updater",
+  "main": "serverscript.js",
+  "scripts": {
+    "test": "echo 'No test specified' && exit 1"
+  },
+  "author": "Pierre Schönbeck",
+  "license": "MIT",
+  "dependencies": {
+    "cron": "^1.0.6",
+    "daemon": "^1.1.0",
+    "daemonize2": "^0.4.2",
+    "socket.io": "^1.3.4",
+    "socket.io-client": "^1.3.4"
+  }
+}
