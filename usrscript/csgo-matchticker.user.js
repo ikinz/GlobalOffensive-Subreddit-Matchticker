@@ -225,8 +225,10 @@ function addMatch(title, hltvlink, time, tournament) {
 			}
             
             // Correct tournament (thank you for fucking this up shitty hltv rss!!!)
-            var tm = html.find("a[href^='/?pageid=82&eventid=']");
-            lbl_tournament.text($(tm[4]).text()); // index 0-3 = links in menu bar.
+            //var tm = html.find("a[href^='/?pageid=82&eventid=']");
+            var tm = html.find("#back > div.mainAreaNoHeadline > div.centerNoHeadline > div.centerFade > div:nth-child(13) > div:nth-child(5) > a");
+            
+            lbl_tournament.text($(tm).text()); // index 0-3 = links in menu bar. //[4]
             
             // Load scores
             var matchidIndex = res.indexOf("var matchid");
@@ -246,6 +248,11 @@ function addMatch(title, hltvlink, time, tournament) {
                         }
                     });
                 }, 10000);
+            } else {
+                if (timetomatch === "LIVE") {
+                    lbl_score1.text("X");
+                    lbl_score2.text("X");
+                }
             }
 		}
 	});
