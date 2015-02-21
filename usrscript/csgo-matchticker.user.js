@@ -73,8 +73,6 @@ function hideMatchTicker() {
 
 // Called when user presses "Show Matchticker"
 function displayMatchTicker() {
-	addOptionsButton();
-
 	// get hot matches from hltv rss
 	var hltvrss = "http://www.hltv.org/hltv.rss.php";
 	GM_xmlhttpRequest({
@@ -104,14 +102,6 @@ function displayMatchTicker() {
 			}
 		}
 	});
-}
-
-// Adds a button for options
-function addOptionsButton() {
-	var tickeroptions = $("<div></div>");
-	tickeroptions.addClass("link");
-	tickeroptions.addClass("ticker-options");
-
 }
 
 // Calculates the time left until match
