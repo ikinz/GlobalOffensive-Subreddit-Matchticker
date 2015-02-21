@@ -4,7 +4,7 @@ var http = require('http'),
 
 var server = http.createServer(function(request, response) {
     response.writeHead(200, {
-        'Content-type': 'text/plain'
+        'Content-type': 'application/json'
     });
     
     var queryObject = url.parse(request.url,true).query;
