@@ -25,12 +25,6 @@ $(document).ready(function() {
 			"white-space: nowrap;" +
 		"}"
 	);
-	GM_addStyle(
-		".ticker-options {" +
-			"height: 100%;" +
-			"width: 40px;" +
-		"}"
-	);
 
 	// Start the script
 	createElements();
